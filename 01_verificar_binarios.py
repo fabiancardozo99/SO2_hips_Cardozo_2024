@@ -1,4 +1,3 @@
-import configuracion_previa
 import os
 import subprocess
 import psycopg2
@@ -89,5 +88,4 @@ def verificar_hashes():
         print("conexion terminada")
 
 if __name__ == "__main__":
-    configuracion_previa.config_previa()
     verificar_hashes()
