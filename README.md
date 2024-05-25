@@ -1,1 +1,3 @@
-# SO2_hips_Cardozo_2024
+# Uso
+
+1. Ejecutar archivo `configuracion_previa.py`
