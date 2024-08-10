@@ -1,5 +1,6 @@
 import pwd
 import subprocess
+import escribir_log, enviar_email
 
 # Funcion para obtener todos los usuarios del sistema
 def obtener_nombre_usuarios():
@@ -22,12 +23,22 @@ def obtener_usuario_crontab(nombre_usuario):
         
 
 def main():
-    nombres_usuarios = obtener_nombre_usuarios()    
+    nombres_usuarios = obtener_nombre_usuarios() 
+    resultado = "" 
+    nombre_cron = ""  
+    
     
     for nombre in nombres_usuarios:
-        print(f"Crontab de usuario {nombre}:")
         crontab = obtener_usuario_crontab(nombre)
-        print(crontab)
+        
+        if crontab.strip() and "no crontab for" not in crontab:  # Verifica si el crontab no está vacío
+            resultado += f"Crontab de usuario {nombre}:\n"
+            resultado += crontab
+            nombre_cron = nombre
+    
+    if resultado:
+        escribir_log.escribir_log("alarmas", f"cronjob: el usuario {nombre_cron} tiene algun cronjob")
+        enviar_email.send_email("Alarma", "cronjob activo", f"El usuario {nombre_cron} tiene algun cronjob")
 
 if __name__ == "__main__":
     main()

@@ -2,6 +2,8 @@ import os
 import subprocess
 import psycopg2
 from dotenv import load_dotenv
+import escribir_log
+import enviar_email
 
 
 load_dotenv('.env')
@@ -77,6 +79,9 @@ def verificar_hashes():
             print("No hubo cambios en los archivos")
         else:
             print("Hashes distintos")
+            escribir_log.escribir_log("alarmas", "binarios cambiados")
+            enviar_email.send_email("Alarma", "Binarios", "Los binarios han sido cambiados, checkear")
+            
         
     except psycopg2.Error as e:
         print(e)

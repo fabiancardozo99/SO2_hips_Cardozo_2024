@@ -1,6 +1,7 @@
 import subprocess
 import bloquear_ip
 import escribir_log
+import enviar_email
 
 def parse_ips_from_log(linea):
     try:
@@ -26,6 +27,8 @@ def verificar_ddos():
     comando = "cat /var/log/Ataque_DNS"
     ocurrencias_ip = {}
     
+    mensaje = '' # Si no pasa nada, queda vacio
+    
     try:
         proceso = subprocess.run(comando, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         
@@ -40,7 +43,12 @@ def verificar_ddos():
             for (ip1, ip2), ocurrencia in ocurrencias_ip.items():
                 if ocurrencia >= 5:
                     bloquear_ip.bloquear_ip(ip1)
-                    escribir_log.escribir_log("prevencion", "Ataque DDOS", ip1)
+                    escribir_log.escribir_log("prevencion", "DDOS: ip bloquada", ip1)
+                    mensaje += f"Ip bloqueada por ataque ddos: {ip1}"
+                    if mensaje != '':
+                        enviar_email.send_email("Prevencion", "DDOS", mensaje)
+                        mensaje = ''
+                        
 
     except Exception as e:
         print(f"Ha ocurrido un error: {e}")
