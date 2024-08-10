@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 import psycopg2
 from dotenv import load_dotenv
 import os
-from hips import ./01_verificar_binarios
+import subprocess
+from hips import accesos_no_validos, cola_mails, configuracion_previa, cron_jobs, logs_check, tmp_check, verificar_binarios, verificar_ddos, verificar_usuarios
 
 
 app = Flask(__name__)
@@ -57,10 +58,12 @@ def login():
         return render_template('login.html')
     
 
-@app.route('/success')
-def success():
-    return "¡Inicio de sesión exitoso!"
-
+@app.route('/<program_name>')
+def ejecutar_herramienta(folder,program_name):
+    # se ejecuta la herramienta correspondiente
+    subprocess.run(["python3", f"./hips/{program_name}.py"])
+    # se muestran los datos en la interfaz de resultado
+    return render_template('resultado.html')
 
 @app.route('/')
 def root():
@@ -69,5 +72,5 @@ def root():
 
 
 if __name__ == "__main__":
-    config_previa()
+    configuracion_previa.config_previa()
     app.run(debug=True)
