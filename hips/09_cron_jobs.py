@@ -26,7 +26,7 @@ def main():
     nombres_usuarios = obtener_nombre_usuarios() 
     resultado = "" 
     nombre_cron = ""  
-    
+    texto = ''
     
     for nombre in nombres_usuarios:
         crontab = obtener_usuario_crontab(nombre)
@@ -37,8 +37,11 @@ def main():
             nombre_cron = nombre
     
     if resultado:
+        texto += f"El usuario {nombre_cron} tiene algun cronjob"
         escribir_log.escribir_log("alarmas", f"cronjob: el usuario {nombre_cron} tiene algun cronjob")
-        enviar_email.send_email("Alarma", "cronjob activo", f"El usuario {nombre_cron} tiene algun cronjob")
+        enviar_email.send_email("Alarma", "cronjob activo", texto)
+    
+    return texto
 
 if __name__ == "__main__":
     main()

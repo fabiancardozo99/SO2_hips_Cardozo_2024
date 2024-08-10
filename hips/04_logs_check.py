@@ -7,6 +7,7 @@ import generar_passw
 def secure_check():
     texto_comando = "sudo grep -i 'smtp:auth' /var/log/secure | grep -i 'authentication failure'"
     proceso = subprocess.run(texto_comando, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    texto = ''
     
     contador_user = {}
     texto_email = ''
@@ -30,11 +31,14 @@ def secure_check():
                     escribir_log.escribir_log('prevencion', f"multiples fallas de autenticacion de {user}")
                     
                     texto_email += f"multiples fallas de autenticacion de {user}, contrasenha cambiada a {contra_nueva}"
+                    texto = texto_email
                 except Exception as e:
                     print(f"Error al cambiar la contraseña para {user}: {e}")
     
     if texto_email:
         enviar_email.send_email('Prevención:', "Errores de autenticación detectados", texto_email)
+        
+    return texto
 
 
 def block_email(email):
@@ -52,6 +56,7 @@ def block_email(email):
         
         
 def maillog_check():
+    texto = ''
     # Comando para leer el archivo de log y filtrar por 'authid'
     comando = "sudo cat /var/log/maillog | grep -i 'authid'"
     
@@ -88,8 +93,9 @@ def maillog_check():
                 # Si el email ha alcanzado 30 intentos, tomar medidas
                 if contador_email[email] == 30:
                     block_email(email)
+                    texto = f"El email {email} ha sido bloqueado por spam"
                     escribir_log.escribir_log("prevencion", f"mail bloqueado: {email} ha sido bloqueado por spam", email)
-                    enviar_email.send_email("Prevencion", "email bloquado por spam", f"El email {email} ha sido bloqueado por spam")
+                    enviar_email.send_email("Prevencion", "email bloquado por spam", texto)
             else:
                 contador_email[email] = 1
 
@@ -97,7 +103,8 @@ def maillog_check():
             print(f"Error: No se pudo extraer el email de la línea: {linea}")
         except Exception as e:
             print(f"Error al procesar la línea: {linea}. Detalles: {e}")
-            
+    
+    return texto
             
 if __name__ == "__main__":
     maillog_check()

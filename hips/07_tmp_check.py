@@ -6,6 +6,7 @@ import os
 import subprocess
 
 def chequeo_tmp():
+    texto = ''
     cuarentena_dir = "/quarantine"
     if not os.path.exists(cuarentena_dir):
         os.makedirs(cuarentena_dir)
@@ -50,6 +51,7 @@ def chequeo_tmp():
                 nombre_archivo = os.path.basename(archivo['ruta_del_archivo'])
                 escribir_log.escribir_log('prevencion', f"tmp sospechoso: El archivo {nombre_archivo} es sospechoso")
                 texto_email += f"Se encontro el archivo {nombre_archivo} en /tmp y se lo movio a /quarantine"
+                texto += texto_email
             else:
                 print(f"El archivo {archivo} ya existe en la carpeta de cuarentena.")
         except Exception as e:
@@ -58,6 +60,8 @@ def chequeo_tmp():
     if archivos_cuarentena:
         print("Se movieron los archivos sospechosos a cuarentena.")
         enviar_email.send_email('Prevencion: ', "Scripts sospechosos en /tmp", texto_email)
+
+    return texto
 
 
 if __name__ == "__main__":

@@ -24,6 +24,7 @@ def parse_ips_from_log(linea):
 
 # Funcion para verificar logs y bloquear ip's en caso de posible ataque dns
 def verificar_ddos():
+    texto = ''
     comando = "cat /var/log/Ataque_DNS"
     ocurrencias_ip = {}
     
@@ -45,6 +46,7 @@ def verificar_ddos():
                     bloquear_ip.bloquear_ip(ip1)
                     escribir_log.escribir_log("prevencion", "DDOS: ip bloquada", ip1)
                     mensaje += f"Ip bloqueada por ataque ddos: {ip1}"
+                    texto += mensaje
                     if mensaje != '':
                         enviar_email.send_email("Prevencion", "DDOS", mensaje)
                         mensaje = ''
@@ -53,6 +55,7 @@ def verificar_ddos():
     except Exception as e:
         print(f"Ha ocurrido un error: {e}")
         
+    return texto
         
 if __name__ == "__main__":
     verificar_ddos()

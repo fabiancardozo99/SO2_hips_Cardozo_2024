@@ -66,6 +66,7 @@ def comparar_hashes(hashes_actuales, hashes_bd):
 
 def verificar_hashes():
     nombre_tabla = 'hashes'
+    texto = ""
     try:
         conn = conectar_bd() # Conectar a la BD
         cursor = conn.cursor()
@@ -76,11 +77,15 @@ def verificar_hashes():
         resultado = comparar_hashes(hashes_actuales, hashes_bd) 
         
         if(resultado):
-            print("No hubo cambios en los archivos")
+            texto = "No hubo cambios en los archivos"
+            print(texto)
+            return texto
         else:
+            texto = "Los binarios han sido cambiados, checkear"
             print("Hashes distintos")
             escribir_log.escribir_log("alarmas", "binarios cambiados")
-            enviar_email.send_email("Alarma", "Binarios", "Los binarios han sido cambiados, checkear")
+            enviar_email.send_email("Alarma", "Binarios", texto)
+            return texto
             
         
     except psycopg2.Error as e:
@@ -92,5 +97,5 @@ def verificar_hashes():
             conn.close()
         print("conexion terminada")
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     verificar_hashes()
