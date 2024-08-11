@@ -37,11 +37,15 @@ def main():
             nombre_cron = nombre
     
     if resultado:
-        texto += f"El usuario {nombre_cron} tiene algun cronjob"
-        escribir_log.escribir_log("alarmas", f"cronjob: el usuario {nombre_cron} tiene algun cronjob")
-        enviar_email.send_email("Alarma", "cronjob activo", texto)
-    
-    return texto
+        texto_mail = f"cronjob: el usuario {nombre_cron} tiene algun cronjob"
 
-if __name__ == "__main__":
-    main()
+        escribir_log.escribir_log("alarmas", f"cronjob: el usuario {nombre_cron} tiene algun cronjob")
+        enviar_email.send_email("Alarma", "cronjob activo", texto_mail)
+        
+        texto += texto_mail
+        
+        print(texto)
+        
+    
+
+main()

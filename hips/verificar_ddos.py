@@ -46,8 +46,9 @@ def verificar_ddos():
                     bloquear_ip.bloquear_ip(ip1)
                     escribir_log.escribir_log("prevencion", "DDOS: ip bloquada", ip1)
                     mensaje += f"Ip bloqueada por ataque ddos: {ip1}"
-                    texto += mensaje
+                    texto = mensaje
                     if mensaje != '':
+                        print(texto)
                         enviar_email.send_email("Prevencion", "DDOS", mensaje)
                         mensaje = ''
                         
@@ -55,8 +56,6 @@ def verificar_ddos():
     except Exception as e:
         print(f"Ha ocurrido un error: {e}")
         
-    return texto
         
-if __name__ == "__main__":
-    verificar_ddos()
+verificar_ddos()
     

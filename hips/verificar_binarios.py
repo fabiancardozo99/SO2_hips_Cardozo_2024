@@ -70,7 +70,7 @@ def verificar_hashes():
     try:
         conn = conectar_bd() # Conectar a la BD
         cursor = conn.cursor()
-        print("Conexion exitosa")
+        # print("Conexion exitosa")
         hashes_actuales = obtener_hashes_actuales() # Obtiene los hashes actuales de los archivos passwd y shadow
         hashes_bd = obtener_hashes_bd(cursor, nombre_tabla) # Obtiene los hashes de la BD
         
@@ -95,7 +95,6 @@ def verificar_hashes():
             cursor.close()
         if conn:
             conn.close()
-        print("conexion terminada")
+        # print("conexion terminada")
 
-# if __name__ == "__main__":
-    verificar_hashes()
+verificar_hashes()

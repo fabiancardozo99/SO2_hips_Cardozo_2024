@@ -7,7 +7,7 @@ def bloquear_ip(dir_ip):
         
         # Ejecutar el comando
         subprocess.run(command, check=True)
-        print(f"La IP {dir_ip} ha sido bloqueada exitosamente.")
+        # print(f"La IP {dir_ip} ha sido bloqueada exitosamente.")
     # Por si algo sale mal
     except subprocess.CalledProcessError as e:
         print(f"Error al intentar bloquear la IP: {e}")

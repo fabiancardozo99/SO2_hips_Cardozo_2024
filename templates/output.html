@@ -1,0 +1,15 @@
+{% block content %}
+<div id="resultado" class="container">
+    <h2>El sistema dice:</h2>
+    <div id="espacio" class="row">
+        <div class="col">
+            <pre>{{ output }}</pre>  <!-- Muestra la salida del script aquí -->
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="{{ url_for('menu') }}">Volver</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

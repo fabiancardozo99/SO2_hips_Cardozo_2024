@@ -31,14 +31,14 @@ def secure_check():
                     escribir_log.escribir_log('prevencion', f"multiples fallas de autenticacion de {user}")
                     
                     texto_email += f"multiples fallas de autenticacion de {user}, contrasenha cambiada a {contra_nueva}"
-                    texto = texto_email
+                    texto += texto_email
+                    print(texto)
                 except Exception as e:
                     print(f"Error al cambiar la contraseña para {user}: {e}")
     
     if texto_email:
         enviar_email.send_email('Prevención:', "Errores de autenticación detectados", texto_email)
         
-    return texto
 
 
 def block_email(email):
@@ -49,7 +49,7 @@ def block_email(email):
         
         # Recargar Postfix para aplicar los cambios
         subprocess.run(["sudo", "postfix", "reload"], check=True)
-        print(f"Email {email} bloqueado exitosamente.")
+        # print(f"Email {email} bloqueado exitosamente.")
         
     except Exception as e:
         print(f"Error al intentar bloquear el email {email}: {e}")        
@@ -94,6 +94,7 @@ def maillog_check():
                 if contador_email[email] == 30:
                     block_email(email)
                     texto = f"El email {email} ha sido bloqueado por spam"
+                    print(texto)
                     escribir_log.escribir_log("prevencion", f"mail bloqueado: {email} ha sido bloqueado por spam", email)
                     enviar_email.send_email("Prevencion", "email bloquado por spam", texto)
             else:
@@ -104,7 +105,7 @@ def maillog_check():
         except Exception as e:
             print(f"Error al procesar la línea: {linea}. Detalles: {e}")
     
-    return texto
+    
             
-if __name__ == "__main__":
-    maillog_check()
+maillog_check()
+secure_check()

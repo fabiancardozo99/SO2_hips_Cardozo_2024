@@ -9,6 +9,7 @@ def main():
         conectados = subprocess.run(comando, shell=True, capture_output=True, text=True)
         # print(conectados.stdout)
         texto += f"Usuarios conectados: {conectados.stdout}"
+        print(texto)
         escribir_log.escribir_log("alarmas", f"usuarios conectados: {conectados.stdout}")
         enviar_email.send_email("Alarmas", "Usuarios conectados", texto)
     except subprocess.CalledProcessError as e:
@@ -16,7 +17,6 @@ def main():
     except Exception as e:
         print(f"Ha ocurrido un error: {e}")
         
-    return texto
     
-if __name__ == "__main__":
-    main()
+
+main()

@@ -3,7 +3,7 @@ import subprocess
 import escribir_log, enviar_email
 
 def bloquear_ips_intentos_fallidos():
-    textoo = ''
+    texto = ''
     try:
         # Comando para leer el archivo de log
         comando = f"sudo cat /var/log/remote_connection.log"
@@ -29,10 +29,11 @@ def bloquear_ips_intentos_fallidos():
                     comando_bloqueo = f"sudo iptables -A INPUT -s {ip} -j DROP"
                     subprocess.run(comando_bloqueo, shell=True, check=True)
                     texto_email = f"Bloqueada la IP por ssh: {ip} después de {intentos} intentos fallidos de conexion ssh."
-                    print(texto_email)
-                    texto += texto_email
+                    # print(texto_email)
+                    texto = texto_email
+                    print(texto)
                     escribir_log.escribir_log("prevencion", texto_email, ip)
-                    enviar_email.send_email("Prevencion", "Multiples accesos fallidos de ssh", texto_email)
+                    # enviar_email.send_email("Prevencion", "Multiples accesos fallidos de ssh", texto_email)
                 except subprocess.CalledProcessError as e:
                     print(f"Error al bloquear la IP {ip}: {e}")
 
@@ -41,7 +42,6 @@ def bloquear_ips_intentos_fallidos():
     except Exception as e:
         print(f"Ocurrió un error inesperado: {e}")
         
-    return textoo
+    # return texto
 
-if __name__ == "__main__":
-    bloquear_ips_intentos_fallidos()
+bloquear_ips_intentos_fallidos()

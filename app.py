@@ -3,7 +3,8 @@ import psycopg2
 from dotenv import load_dotenv
 import os
 import subprocess
-from hips import accesos_no_validos, cola_mails, configuracion_previa, cron_jobs, logs_check, tmp_check, verificar_binarios, verificar_ddos, verificar_usuarios
+from hips import configuracion_previa
+
 
 
 app = Flask(__name__)
@@ -50,20 +51,27 @@ def login():
         conn.close() 
 
         if user: 
-            return redirect(url_for('success')) 
+            return redirect(url_for('menu')) 
         else: 
             error = "Credenciales no validas, probar otra vez" 
             return error
     else: 
         return render_template('login.html')
     
+@app.route('/menu') 
+def menu(): 
+    return render_template('menu.html')
+    
 
-@app.route('/<program_name>')
-def ejecutar_herramienta(folder,program_name):
+@app.route('/hips/<program_name>')
+def ejecutar_herramienta(program_name):
     # se ejecuta la herramienta correspondiente
-    subprocess.run(["python3", f"./hips/{program_name}.py"])
+    resultado = subprocess.run(["python3", f"./hips/{program_name}"], capture_output=True, text=True)
+    output = resultado.stdout
     # se muestran los datos en la interfaz de resultado
-    return render_template('resultado.html')
+    return render_template('output.html', output=output)
+
+
 
 @app.route('/')
 def root():

@@ -38,7 +38,7 @@ def chequeo_tmp():
                         archivos_cuarentena.append(cuarentena)
             except (OSError, IOError) as e:
                 print(f"Error al leer el archivo {archivo}: {e}")
-    print(archivos_cuarentena)
+    # print(archivos_cuarentena)
 
 
     for archivo in archivos_cuarentena:
@@ -52,17 +52,15 @@ def chequeo_tmp():
                 escribir_log.escribir_log('prevencion', f"tmp sospechoso: El archivo {nombre_archivo} es sospechoso")
                 texto_email += f"Se encontro el archivo {nombre_archivo} en /tmp y se lo movio a /quarantine"
                 texto += texto_email
+                print(texto)
             else:
                 print(f"El archivo {archivo} ya existe en la carpeta de cuarentena.")
         except Exception as e:
             print(f"No se pudo mover a cuarentena el archivo: {nombre_archivo}. Error: {e}")
 
     if archivos_cuarentena:
-        print("Se movieron los archivos sospechosos a cuarentena.")
         enviar_email.send_email('Prevencion: ', "Scripts sospechosos en /tmp", texto_email)
 
-    return texto
 
 
-if __name__ == "__main__":
-    chequeo_tmp()
+chequeo_tmp()

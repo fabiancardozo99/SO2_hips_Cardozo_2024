@@ -23,8 +23,8 @@ def obtener_tam_cola():
         
         if tam_cola > 40:
             texto_email = f"Hay {tam_cola} mensajes en cola de correos"
-            texto += texto_email
-            print(f"Hay {tam_cola} mensajes en cola de correos")
+            texto = texto_email
+            print(texto)
             escribir_log.escribir_log("alarmas", "cola mails: Muchos mensajes en la cola de correos")
             enviar_email.send_email("Alarma", "Cola de correos", texto_email)
         else:    
@@ -33,7 +33,5 @@ def obtener_tam_cola():
     except Exception as e:
         print(f"Error al obtener el tamaño de la cola de correos: {e}")
     
-    return texto
 
-if __name__ == "__main__":
-    obtener_tam_cola()
+obtener_tam_cola()
